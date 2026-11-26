@@ -1,0 +1,4 @@
+/* Component-specific styles */
+
+.btn-primary { background: #4cd9f2; color: #0c111b; border-color: #38b9d1; }
+.btn-primary:hover:not(:disabled) { background: #29c6e1; color: #0c111b; }

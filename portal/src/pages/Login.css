@@ -1,0 +1,46 @@
+/* Zent customer login — isolated from the authenticated portal. */
+.zent-portal-login {
+  height: 100%; overflow: auto; overscroll-behavior: contain;
+  background: radial-gradient(ellipse at 20% 75%, #193c50, transparent 62%), linear-gradient(130deg, #0c111b, #153344);
+  font-family: var(--font-ui); color: #142337; font-size: 15px;
+  font-weight: 400; line-height: 1.5; text-transform: none; letter-spacing: normal;
+  color-scheme: light;
+}
+.zpl-layout {
+  min-height: 100%; max-width: 1120px; margin-inline: auto;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 390px);
+  align-items: center; gap: clamp(40px, 8vw, 125px); padding: 40px clamp(24px, 5vw, 64px);
+}
+.zpl-brand { position: relative; isolation: isolate; color: #f1f8fd; }
+.zpl-eyebrow { display: block; color: #7ce9f7; font-size: 11px; font-weight: 750; letter-spacing: .10em; }
+.zpl-brand h1 { font-size: clamp(35px, 4vw, 52px); line-height: 1.1; font-weight: 730; letter-spacing: -.045em; margin: 20px 0 16px; }
+.zpl-brand p { color: #c5dbe7; font-size: 15px; line-height: 1.7; max-width: 355px; }
+.zpl-art { position: absolute; z-index: -1; pointer-events: none; width: 310px; height: 310px; left: -85px; top: -66px; opacity: .6; display: grid; place-items: center; }
+.zpl-art i { grid-area: 1 / 1; width: 100%; aspect-ratio: 1; border: 1px solid #78e7fa25; border-radius: 50%; }
+.zpl-art i:nth-child(2) { width: 82%; background: #54d6ee05; }
+.zpl-art i:nth-child(3) { width: 64%; background: #54d6ee09; }
+.zpl-card { min-width: 0; background: #fff; padding: 34px; border: 1px solid #d5e0e9; border-radius: 16px; box-shadow: 0 20px 55px #0004; }
+.zpl-logo { display: block; width: 170px; max-width: 100%; height: auto; margin: 0 auto 30px; }
+.zpl-title { margin-bottom: 24px; }
+.zpl-title h2 { font-size: 21px; font-weight: 730; letter-spacing: -.025em; }
+.zpl-title p { font-size: 13px; color: #526579; margin-top: 4px; }
+.zpl-form { display: grid; gap: 15px; }
+.zpl-field { display: grid; gap: 7px; }
+.zpl-field label { font-size: 13px; color: #334e65; font-weight: 650; }
+.zpl-field label span { color: #a03932; }
+.zpl-field input { width: 100%; min-width: 0; font: inherit; font-size: 14px; color: #142337; background: #fff; border: 1px solid #cfdbe6; border-radius: 8px; padding: 11px 12px; min-height: 42px; }
+.zpl-field input::placeholder { color: #667789; opacity: 1; }
+.zpl-field input:focus-visible { outline: 2px solid #086b80; outline-offset: 2px; }
+.zpl-submit { min-height: 42px; border: 0; border-radius: 8px; padding: 10px 15px; font: inherit; font-size: 13px; font-weight: 700; color: #0c111b; background: #4cd9f2; box-shadow: 0 4px 12px #086b801a; cursor: pointer; }
+.zpl-submit:hover:not(:disabled) { background: #77e3f5; }
+.zpl-submit:focus-visible { outline: 2px solid #086b80; outline-offset: 3px; }
+.zpl-submit:disabled { opacity: .65; cursor: wait; }
+.zpl-error { color: #96392e; background: #fff0ed; border: 1px solid #edc7c0; padding: 10px 12px; border-radius: 8px; font-size: 13px; overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .zpl-layout { grid-template-columns: minmax(0, 390px); justify-content: center; align-content: center; gap: 28px; padding: 32px 20px; }
+  .zpl-art { display: none; }
+  .zpl-brand { text-align: center; }
+  .zpl-brand h1 { font-size: 32px; margin: 12px 0 10px; }
+  .zpl-brand p { font-size: 14px; margin-inline: auto; }
+  .zpl-card { padding: clamp(22px, 6vw, 34px); }
+}

@@ -1,0 +1,82 @@
+name: Security and build checks
+
+'on':
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '23 7 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Security unit tests
+        run: node scripts/test-security.mjs
+
+  dependency-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        component: [backend, frontend, portal]
+    defaults:
+      run:
+        working-directory: ${{ matrix.component }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      # Reports all severities. High/critical findings fail the job.
+      # See docs/security/assessment.md for the current moderate residual risk.
+      - name: Full lockfile audit (including development tools)
+        run: npm audit --audit-level=high
+      - name: Production dependency audit
+        if: ${{ !cancelled() }}
+        run: npm audit --omit=dev --audit-level=moderate
+
+  build:
+    if: github.event_name != 'schedule'
+    runs-on: windows-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        component: [backend, frontend, portal]
+    defaults:
+      run:
+        working-directory: ${{ matrix.component }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Reproduce dependency installation
+        run: npm ci
+      - name: Build renderer or portal
+        if: matrix.component != 'backend'
+        run: npm run build
+      - name: Check backend entry syntax
+        if: matrix.component == 'backend'
+        run: node --check src/app.js
